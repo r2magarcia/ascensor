@@ -77,7 +77,6 @@ function moverse(final) {
  function elevador() {
     ordenInicial();
     definirSentido();
-    var index=0;
     while(recorrido.length>0){
         if(sentido=="subiendo"){
             while(pisoActual<recorrido[recorrido.length-1]){
@@ -86,6 +85,7 @@ function moverse(final) {
                 recorrido.push(pisoActual);
                 recorrido.sort(function(a, b){return a-b});
                 moverse(recorrido[recorrido.indexOf(pisoActual)+1])
+                recorrido.splice(recorrido.indexOf(ant), 1);
             }
         }else{
             while(pisoActual>recorrido[0]){
@@ -93,10 +93,10 @@ function moverse(final) {
                 var ant=pisoActual;
                 recorrido.push(pisoActual);
                 recorrido.sort(function(a, b){return a-b});
-                moverse(recorrido[recorrido.indexOf(pisoActual)-1])
+                moverse(recorrido[recorrido.indexOf(pisoActual)-1]);
+                recorrido.splice(recorrido.indexOf(ant), 1);
             }
         }
-        index++;
         cambiarSentido();
     }
 
@@ -111,5 +111,7 @@ añadirPiso(5,2);
 añadirPiso(29,10);
 añadirPiso(13,1);
 añadirPiso(10,1);
+
+
 elevador();
 
