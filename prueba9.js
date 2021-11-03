@@ -1,5 +1,5 @@
 let arrayPisos=[];
-let pisoIni=5;
+let pisoIni=4;
 let mapaPisos={};
 let sentido="";
 let pisoActual=0;
@@ -15,67 +15,82 @@ function añadirPiso(llave, valor) {
 }
 
 function definirSentido() {
-    sentido = pisoIni<arrayPisos[0]? "subiendo" : "bajando";
+    sentido = pisoActual<arrayPisos[0]? "subiendo" : "bajando";
+}
+
+function cambiarSentido() {
+    sentido = sentido=="bajando"? "subiendo" : "bajando";
 }
 
 function ordenInicial() {
     pisoActual=pisoIni;
     recorrido=[...arrayPisos];
-    recorrido.sort();
 }
 
 function detenerElevador() {
+    recorrido.splice(recorrido.indexOf(pisoActual), 1);
    console.log(`Elevador en piso ${pisoActual}`);
    console.log(`Elevador se detiene`);
-   recorrido = recorrido.filter(function(e) { return e !== pisoActual })
    if(mapaPisos[pisoActual]){
         console.log(`Piso ingresado ${mapaPisos[pisoActual]}`);   
-        recorrido.push(mapaPisos[pisoActual]);
-        recorrido.sort();
+        recorrido[length]=(mapaPisos[pisoActual]);
+        recorrido.sort(function(a, b){return a-b});
    }
+   
+
 }
 
-function moverse(final) {
+ function moverse(final) {
     if(sentido=="subiendo"){
-        for (index=pisoActual; index < final; ) {
+        for (index=pisoActual; pisoActual < final; pisoActual++) {
             console.log(`Elevador en piso ${pisoActual}`);
             console.log(`Elevador ${sentido}`);
-            pisoActual++;
         } 
     }else{
-        for (index=pisoActual; pisoActual > final; ) {
+        for (index=pisoActual; pisoActual > final; pisoActual--) {
             console.log(`Elevador en piso ${pisoActual}`);
-            console.log(`Elevador ${sentido}`);
-            pisoActual--;  
+            console.log(`Elevador ${sentido}`); 
         }
     }
-    detenerElevador();
+     detenerElevador();
 }
 
-function elevador() {
+ function elevador() {
     ordenInicial();
     definirSentido();
-    // console.log(arrayPisos[0]);
-    console.log(recorrido.findIndex(e=>e==arrayPisos[0]));
-    console.log(recorrido);
-    if(sentido=="subiendo"){
-        console.log("subir");
-        for (let index = recorrido.findIndex(e=>e==arrayPisos[0]); index <= recorrido.length-1; index++) {
-            console.log(recorrido[index]);
-            moverse(recorrido[index]); 
+    var index=0;
+    while(index<2){
+        if(sentido=="subiendo"){
+            while(pisoActual<recorrido[recorrido.length-1]){
+                // console.log("cambiar de piso")
+                var ant=pisoActual;
+                recorrido.push(pisoActual);
+                recorrido.sort(function(a, b){return a-b});
+                moverse(recorrido[recorrido.indexOf(pisoActual)+1])
+            }
+        }else{
+            while(pisoActual>recorrido[0]){
+                // console.log("cambiar de piso")
+                var ant=pisoActual;
+                recorrido.push(pisoActual);
+                recorrido.sort(function(a, b){return a-b});
+                moverse(recorrido[recorrido.indexOf(pisoActual)-1])
+            }
         }
-    }else{
-        console.log("bajar");
-        for (let index = recorrido.findIndex(e=>e==arrayPisos[0]); index >= 0; index--) {
-            moverse(recorrido[index]); 
-        }
-    }      
+        index++;
+        cambiarSentido();
+        // console.log(sentido);
+        // console.log(recorrido);
+        // console.log(recorrido[recorrido.findIndex(e=>e==recorrido[0])]);
+    }
+
+        
+
 }
 
-añadirPiso(2,5);
-añadirPiso(1,20);
-añadirPiso(3,1);
-añadirPiso(7,9);
-console.log(arrayPisos);
+añadirPiso(5,8);
+añadirPiso(29,10);
+añadirPiso(13,16);
+añadirPiso(10,1);
 elevador();
 
